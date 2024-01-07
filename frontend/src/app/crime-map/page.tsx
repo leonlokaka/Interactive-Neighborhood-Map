@@ -29,10 +29,9 @@ export default function Page() {
   //   const dataUrl =
   //     "http://mylocal.com:3000/d-solo/d2d486b4-b826-4dce-bfc3-5c863cd7f4e9/inm?orgId=1&from=1704108404832&to=1704130004832&panelId=1&var-test=North%20Toronto&var-text=https:%2F%2Fleonlokaka.github.io%2FInteractive-Neighborhood-Map-Datasource%2Fneighbourhood-crime-rates.json";
 
-  const panelPath =
-    "/d-solo/d2d486b4-b826-4dce-bfc3-5c863cd7f4e9/inm?orgId=1&from=1704108404832&to=1704130004832&panelId=1";
-  const panelURL = new URL(panelPath, process.env.grafanaUrl);
-
+  const panelPath = process.env.GRAFANA_CRIME_MAP_PATH;
+  const panelURL = panelPath ? new URL(panelPath, process.env.GRAFANA_URL) : "";
+  
   return (
     <Container maxWidth="xl">
       <Grid container spacing={4} justifyContent={"center"}>
