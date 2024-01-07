@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import "./globals.css";
 import Footer from "./common/Footer";
 import Header from "./common/Header";
@@ -6,6 +6,7 @@ import Header from "./common/Header";
 import MainProvider from "./mainProvider";
 import Head from "next/head";
 import { metadata } from "./const";
+import Script from "next/script";
 
 export default function RootLayout({
   children,
@@ -40,6 +41,17 @@ export default function RootLayout({
           </main>
           <Footer />
         </MainProvider>
+
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_MEASUREMENT_ID}`} />
+        <Script id="google-analytics">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+ 
+          gtag('config', '${process.env.GA_MEASUREMENT_ID}');
+        `}
+        </Script>
       </body>
     </html>
   );
