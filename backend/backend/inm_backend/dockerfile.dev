@@ -1,0 +1,17 @@
+FROM python:3.13-rc-slim-bookworm
+
+RUN apt install sqlite3 -y
+# RUN pip install django
+# RUN pip install requests
+
+# RUN chmod +x start.sh
+# WORKDIR /usr/src/app/backend/inm_backend
+# RUN ln -s /usr/src/app/backend/inm_backend /inm_backend 
+# EXPOSE 8881
+# CMD ["./start.sh"]
+
+
+# RUN conda create -n main_env python=3.10 django requests shapely
+RUN conda env create -f conda_config.yml
+RUN conda activate main_env
+RUN pip install django_mongoengine

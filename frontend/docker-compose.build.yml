@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  frontend:
+    image: registry.gitlab.com/avaval/esg/aclimate/frontend:1.0.0
+    build:
+      context: .
+      args:
+        auth_token: ${AUTH_TOKEN}
