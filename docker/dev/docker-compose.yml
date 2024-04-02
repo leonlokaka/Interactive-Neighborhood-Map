@@ -1,0 +1,29 @@
+version: '2'
+services:
+  backend:
+    image: 'leonlo5302/inm-backend-dev:1.0.0'
+    container_name: inm-dev-backend
+    tty: true
+    ports:
+      - '8881:8881'
+    volumes:
+      - '..\..\backend:/usr/src/app/backend'
+  db:
+    image: 'mongo:7'
+    container_name: inm-dev-db
+    volumes:
+      - '.\volumes\data_db:/data/db'
+    ports:
+      - '8882:27017'
+    env_file:
+      - db.env
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: inm-dev-grafana
+    restart: unless-stopped
+    ports:
+      - '8883:3000'
+    volumes:
+      - '.\volumes\grafana:/var/lib/grafana'
+    env_file:
+      - grafana.env
