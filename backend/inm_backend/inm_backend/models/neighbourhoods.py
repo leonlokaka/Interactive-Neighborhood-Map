@@ -1,7 +1,7 @@
 import datetime
 import json
 from mongoengine import *
-from inm_backend.utils import get_mongodb_alias
+from inm_backend.utils import center_point_of_geometry, get_mongodb_alias
 from rest_framework_mongoengine.serializers import DocumentSerializer
 
 
@@ -29,6 +29,8 @@ class Neighbourhoods(Document):
     classification_code = StringField()
     objectid = StringField()
     geometry = DictField()
+    center_latitude = FloatField()
+    center_longtitude = FloatField()
     updatedAt = DateTimeField(default=datetime.datetime.now)
 
 
@@ -40,6 +42,7 @@ def json_to_Neighbourhoods(json_str, save: bool = False):
     for feature in features:
         properties = feature.get('properties', {})
         geometry = feature.get('geometry', {})
+        center_longtitude, center_latitude = center_point_of_geometry(geometry)
 
         doc = Neighbourhoods(
             data_id=int(properties.get('_id')),
@@ -55,15 +58,17 @@ def json_to_Neighbourhoods(json_str, save: bool = False):
                 'CLASSIFICATION_CODE')).strip(),
             objectid=str(properties.get('OBJECTID')).strip(),
             geometry=geometry,
+            center_latitude=center_latitude,
+            center_longtitude=center_longtitude
         )
         documents.append(doc)
         obj_dict = {field: getattr(doc, field)
                     for field in doc._fields if field != 'id'}
         if (save):
-            Neighbourhoods.objects(area_long_code=doc.area_long_code).update(upsert=True, **obj_dict)
-            
-    return documents
+            Neighbourhoods.objects(area_long_code=doc.area_long_code).update(
+                upsert=True, **obj_dict)
 
+    return documents
 
 
 class NeighbourhoodsSerializer(DocumentSerializer):

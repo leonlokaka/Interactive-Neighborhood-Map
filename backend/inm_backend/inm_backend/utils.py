@@ -31,3 +31,22 @@ def point_in_geometry(geometry, point_coordinates):
             if polygon.contains(point):
                 return True
     return False
+
+def center_point_of_geometry(geometry):
+    centroids = []
+    for polygons in geometry.get('coordinates'):
+        for polygonCoors in polygons:
+            polygon = Polygon(polygonCoors)
+            centroids.append(polygon.centroid)
+            
+    if(len(centroids) == 1):
+        return centroids[0].x, centroids[0].y
+    elif(len(centroids) > 1):
+        total_x = total_y = 0
+        for centroid in centroids:
+            total_x += centroid.x
+            total_y += centroid.y
+        center_x = total_x / len(centroids)
+        center_y = total_y / len(centroids)
+        return center_x, center_y
+    return None, None

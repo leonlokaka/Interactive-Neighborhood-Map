@@ -30,17 +30,17 @@ class Command(BaseCommand):
 
         if target == DataTarget.all.value or target == DataTarget.neighbourhoods.value:
             params.append(ParserArgs(id="neighbourhoods",
-                                name="Neighbourhoods", format_1="GEOJSON", format_2="4326", handle_json_function=json_to_Neighbourhoods))
+                                     name="Neighbourhoods", format_1="GEOJSON", format_2="4326", handle_json_function=json_to_Neighbourhoods))
         if target == DataTarget.all.value or target == DataTarget.neighbourhood_crime_rates.value:
             params.append(ParserArgs(id="neighbourhood-crime-rates",
-                                name="neighbourhood_crime_rates", format_1="GEOJSON", format_2="4326", handle_json_function=json_to_NeighbourhoodCrimeRates))
+                                     name="neighbourhood-crime-rates", format_1="GEOJSON", format_2="4326", handle_json_function=json_to_NeighbourhoodCrimeRates))
         if target == DataTarget.all.value or target == DataTarget.parks_and_recreation_facilities.value:
             params.append(ParserArgs(id="parks-and-recreation-facilities",
-                                name="Parks and Recreation Facilities", format_1="GEOJSON", format_2="4326", handle_json_function=json_to_ParksAndRecreationFacilities))
+                                     name="Parks and Recreation Facilities", format_1="GEOJSON", format_2="4326", handle_json_function=json_to_ParksAndRecreationFacilities))
 
         if params:
             for param in params:
                 result = start_parse_data(param)
-                print(f"Parse {param.id} success" if result else "Command failed")
+                print(f"Parse {param.id} success"if result else f"Parse {param.id} failed")
         else:
             print("Command incorrect argument")

@@ -2,6 +2,7 @@ import datetime
 import json
 from mongoengine import *
 from inm_backend.utils import get_mongodb_alias
+from rest_framework_mongoengine.serializers import DocumentSerializer
 
 
 class NeighbourhoodCrimeRates(Document):
@@ -40,6 +41,12 @@ class NeighbourhoodCrimeRates(Document):
     theftover = IntField()
     theftover_rate = FloatField()
     updatedAt = DateTimeField(default=datetime.datetime.now)
+
+
+class NeighbourhoodCrimeRatesSerializer(DocumentSerializer):
+    class Meta:
+        model = NeighbourhoodCrimeRates
+        fields = '__all__'
 
 
 def json_to_NeighbourhoodCrimeRates(json_str, save: bool = False):

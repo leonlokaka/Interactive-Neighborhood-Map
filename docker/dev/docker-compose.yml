@@ -24,6 +24,8 @@ services:
     ports:
       - '8883:3000'
     volumes:
-      - '.\volumes\grafana:/var/lib/grafana'
+      - '.\volumes\grafana2:/var/lib/grafana'
+      - '..\..\grafana\grafana.ini:/etc/grafana/grafana.ini'
+      # - '..\..\grafana\custom.ini:/usr/share/grafana/conf/custom.ini'
     env_file:
       - grafana.env

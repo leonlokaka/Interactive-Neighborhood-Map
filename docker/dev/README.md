@@ -9,7 +9,7 @@
  3. install vscode extensions
 
 	```
-	code --install-extension ms-python.python ms-python.debugpy batisteo.vscode-django donjayamanne.python-environment-manager
+	code --install-extension ms-python.python ms-python.debugpy batisteo.vscode-django donjayamanne.python-environment-manager ms-python.autopep8
 	```
 
  4. In VScode Python extension tab choose environment for main_env

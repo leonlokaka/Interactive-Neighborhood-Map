@@ -21,7 +21,10 @@ from . import views
 urlpatterns = format_suffix_patterns([
     path('neighbourhood_crime_rates_yearly_stat', views.neighbourhood_crime_rates_yearly_stat, name="neighbourhood_crime_rates_yearly_stat"),
     path('neighbourhood_crime_rates_year_range', views.neighbourhood_crime_rates_year_range, name="neighbourhood_crime_rates_year_range"),
+    path('neighbourhood_crime_rates_year_options', views.neighbourhood_crime_rates_year_options, name="neighbourhood_crime_rates_year_options"),
+    path('neighbourhood_area_options', views.neighbourhood_area_options, name="neighbourhood_area_options"),
     path('neighbourhoods_geometry', views.neighbourhoods_geometry, name="neighbourhoods_geometry"),
+    path('neighbourhood_crime_rates', views.neighbourhood_crime_rates, name="neighbourhood_crime_rates"),
     path('neighbourhoods_data', views.neighbourhoods_data, name="neighbourhoods_data"),
 ]
 )

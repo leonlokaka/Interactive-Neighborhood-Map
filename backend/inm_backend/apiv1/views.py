@@ -5,8 +5,9 @@ from django.contrib.auth.models import Group, User
 from rest_framework import status, request
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from inm_backend.models.neighbourhood_crime_rates import NeighbourhoodCrimeRates
+from inm_backend.models.neighbourhood_crime_rates import NeighbourhoodCrimeRates, NeighbourhoodCrimeRatesSerializer
 from inm_backend.models.neighbourhoods import Neighbourhoods, NeighbourhoodsSerializer
+import numpy as np
 
 
 class NeighbourhoodSelectDataOptions(Enum):
@@ -26,44 +27,79 @@ def neighbourhoods_geometry(request):
 
 
 @api_view(["GET"])
+def neighbourhood_crime_rates(request):
+    hood_id = int(request.GET.get("area_long_code") or 0)
+    year = int(request.GET.get("year") or 0)
+    matchItems = {}
+    if (hood_id):
+        matchItems["hood_id"] = hood_id
+    if (year):
+        matchItems["year"] = year
+    neighbourhoods = NeighbourhoodCrimeRates.objects(**matchItems).all()
+    response_data = []
+    for row in neighbourhoods:
+        serializer = NeighbourhoodCrimeRatesSerializer(row)
+        response_data.append(serializer.data)
+    return Response(response_data)
+
+
+@api_view(["GET"])
 def neighbourhoods_data(request):
     geometry = bool(int(request.GET.get("geometry") or 0))
     area_long_code = int(request.GET.get("area_long_code") or 0)
-    select_data_list: list[str]  = []
+    year = int(request.GET.get("year") or 0)
+    select_data_list: list[str] = []
     try:
-        select_data_list= json.loads(
+        select_data_list = json.loads(
             request.GET.get("select_data_list") or 0)
     except (TypeError, json.JSONDecodeError):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     lookup_aggregations = {
-        NeighbourhoodSelectDataOptions.neighbourhood_crime_rates.value: {
+        NeighbourhoodSelectDataOptions.neighbourhood_crime_rates.value: [{
             "$lookup": {
                 "from": "neighbourhood_crime_rates",
                 "localField": "area_long_code",
                 "foreignField": "hood_id",
                 "as": "neighbourhood_crime_rates",
                 "pipeline": [
-                        {
-                            # "$match": {
-                            #     "year": year,
-                            # },
-                            "$sort": {
-                                "year": -1
-                            }
+                    {
+                        "$match": {
+                            "year": year,
                         },
+                    } if year else {
+                        "$sort": {
+                            "year": -1
+                        }
+                    },
+
                 ],
             },
-        },
+        }, {
+            "$addFields": {
+                "neighbourhood_crime_rates": {
+                    "_id": {"$toString": "$_id"},
+                },
+            }
+        }],
         NeighbourhoodSelectDataOptions.parks_and_recreation_facilities.value:
-        {
-            "$lookup": {
-                "from": "parks_and_recreation_facilities",
-                "localField": "area_long_code",
-                "foreignField": "area_long_code",
-                "as": "parks_and_recreation_facilities",
+        [
+            {
+                "$lookup": {
+                    "from": "parks_and_recreation_facilities",
+                    "localField": "area_long_code",
+                    "foreignField": "area_long_code",
+                    "as": "parks_and_recreation_facilities",
+                }
             },
-        },
+            {
+                "$addFields": {
+                    "parks_and_recreation_facilities": {
+                        "_id": {"$toString": "$_id"},
+                    },
+                }
+            }
+        ]
     }
 
     aggregations = [
@@ -74,6 +110,11 @@ def neighbourhoods_data(request):
             } if geometry else {
                 "objectid": 0,
                 "geometry": 0,
+            }
+        },
+        {
+            "$addFields": {
+                "_id": {"$toString": "$_id"},
             }
         }
     ]
@@ -87,19 +128,17 @@ def neighbourhoods_data(request):
             },
         )
 
-    if (NeighbourhoodSelectDataOptions.all in select_data_list):
-        aggregations = aggregations + lookup_aggregations
+    if (NeighbourhoodSelectDataOptions.all.value in select_data_list):
+        aggregations.extend(
+            np.array(list(lookup_aggregations.values())).flatten())
     elif (len(select_data_list) > 0):
         for collection in select_data_list:
             if collection in lookup_aggregations:
-                aggregations.append(lookup_aggregations[collection])
+                aggregations.extend(list(lookup_aggregations[collection]))
 
     results = Neighbourhoods.objects().aggregate(aggregations)
 
-    response_data = []
-    for row in results:
-        row["_id"] = str(row["_id"])
-        response_data.append(row)
+    response_data = [row for row in results]
     return Response(response_data)
 
 
@@ -117,12 +156,82 @@ def neighbourhood_crime_rates_year_range(request):
                         "$min": "$year",
                     },
                 }
-            }
+            },
         ])
     if year_range._has_next():
         response_data = year_range.try_next()
         return Response(response_data)
     return None
+
+
+@api_view(["GET"])
+def neighbourhood_crime_rates_year_options(request):
+    result = NeighbourhoodCrimeRates.objects().aggregate(
+        [
+            {
+                "$group": {
+                    "_id": "$year"
+                }
+            },
+            {
+                "$sort": {
+                    "_id": -1
+                }
+            }, {
+                "$project": {
+                    "_id": 0,
+                    "__value": "$_id",
+                    "__text": "$_id"
+                }
+            }
+            # {
+            #     "$group": {
+            #         "_id": "",
+            #         "__value ": {
+            #             "$push": "$_id"
+            #         }
+            #     }
+            # }, {
+            #     "$project": {
+            #         "_id": 0,
+            #         "__value ": 1
+            #     }
+            # }
+        ])
+    # if result._has_next():
+    #     response_data = result.try_next()
+    #     return Response(response_data)
+    # return None
+
+    response_data = [row for row in result]
+    return Response(response_data)
+
+
+@api_view(["GET"])
+def neighbourhood_area_options(request):
+    result = Neighbourhoods.objects().aggregate(
+        [
+            {
+                "$group": {
+                    "_id": "$area_long_code",
+                    "area_name": {"$first": "$area_name"}
+                }
+            },
+            {
+                "$sort": {
+                    "area_name": 1
+                }
+            }, {
+                "$project": {
+                    "_id": 0,
+                    "__value": "$_id",
+                    "__text": "$area_name"
+                }
+            }
+        ])
+    response_data = [row for row in result]
+    return Response(response_data)
+
 
 @api_view(["GET"])
 def neighbourhood_crime_rates_yearly_stat(request):
@@ -200,5 +309,4 @@ def neighbourhood_crime_rates_yearly_stat(request):
     )
 
     response_data = [row for row in yearly_stat]
-
     return Response(response_data)
