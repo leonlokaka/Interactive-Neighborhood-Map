@@ -1,0 +1,39 @@
+
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  python manage.py test
+```
+
+
+
+## Parse Data
+Start getting data from datasource and store into DB
+```
+python manage.py parse_data all
+```
+
+Also can parse specific type of data
+```
+python manage.py parse_data neighbourhoods
+python manage.py parse_data neighbourhood_crime_rates
+python manage.py parse_data parks_and_recreation_facilities
+```
+
+## Running API Server
+
+To run tests, run the following command
+
+```bash
+  python manage.py runserver
+```
+
+## Running API Server in Production
+
+To run tests, run the following command
+
+```bash
+  python manage.py runserver --settings=inm_backend.prod_settings
+```

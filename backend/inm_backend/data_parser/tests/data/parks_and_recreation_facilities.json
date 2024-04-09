@@ -1,0 +1,80 @@
+{
+    "type": "FeatureCollection",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "_id": 299,
+                "LOCATIONID": "1014",
+                "ASSET_ID": 1033.0,
+                "ASSET_NAME": "THIRTY-EIGHTH STREET PARK",
+                "TYPE": "Park",
+                "AMENITIES": "Playground",
+                "ADDRESS": "351 LAKE PROMENADE",
+                "PHONE": "",
+                "URL": "https:\/\/www.toronto.ca\/data\/parks\/prd\/facilities\/complex\/1014\/index.html"
+            },
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [
+                    [
+                        -79.537383094227593,
+                        43.588198742326099
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "_id": 2,
+                "LOCATIONID": "2548",
+                "ASSET_ID": 891.0,
+                "ASSET_NAME": "ROSEMOUNT GARDENS PARKETTE",
+                "TYPE": "Park",
+                "AMENITIES": "Playground",
+                "ADDRESS": "255 QUEENSLEA AVE",
+                "PHONE": "",
+                "URL": "https:\/\/www.toronto.ca\/data\/parks\/prd\/facilities\/complex\/2548\/index.html"
+            },
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [
+                    [
+                        -79.527590313356995,
+                        43.706773834736502
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "_id": 3,
+                "LOCATIONID": "2748",
+                "ASSET_ID": 28823.0,
+                "ASSET_NAME": "AVONSHIRE PARKETTE",
+                "TYPE": "Park",
+                "AMENITIES": "",
+                "ADDRESS": "1 A OAKBURN CRES",
+                "PHONE": "",
+                "URL": "https:\/\/www.toronto.ca\/data\/parks\/prd\/facilities\/complex\/2748\/index.html"
+            },
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [
+                    [
+                        -79.405847735996304,
+                        43.758324397635803
+                    ]
+                ]
+            }
+        }
+    ]
+}
