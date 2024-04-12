@@ -9,6 +9,8 @@ from inm_backend.models.neighbourhood_crime_rates import NeighbourhoodCrimeRates
 from inm_backend.models.neighbourhoods import Neighbourhoods, NeighbourhoodsSerializer
 import numpy as np
 
+from inm_backend.models.parks_and_recreation_facilities import ParksAndRecreationFacilities, ParksAndRecreationFacilitiesSerializer
+
 
 class NeighbourhoodSelectDataOptions(Enum):
     all = "all"
@@ -309,4 +311,13 @@ def neighbourhood_crime_rates_yearly_stat(request):
     )
 
     response_data = [row for row in yearly_stat]
+    return Response(response_data)
+
+@api_view(["GET"])
+def parks_and_recreation_facilities(request):
+    data = ParksAndRecreationFacilities.objects.all()
+    response_data = []
+    for row in data:
+        serializer = ParksAndRecreationFacilitiesSerializer(row)
+        response_data.append(serializer.data)
     return Response(response_data)

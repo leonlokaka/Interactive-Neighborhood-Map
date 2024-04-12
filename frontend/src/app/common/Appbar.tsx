@@ -23,10 +23,11 @@ import styled from "@emotion/styled";
 
 interface IAppIconTitle {
   fontSize?: string;
+  mobileFontSize?: string;
   iconSize?: number;
 }
 function AppIconTitle(props: IAppIconTitle) {
-  const { fontSize = "20px", iconSize = 50 } = props;
+  const { fontSize = "20px", iconSize = 50, mobileFontSize = "15px" } = props;
   return (
     <>
       <Image
@@ -46,7 +47,7 @@ function AppIconTitle(props: IAppIconTitle) {
           fontFamily: "monospace",
           fontWeight: 700,
           color: "inherit",
-          fontSize: fontSize,
+          fontSize: { xs: mobileFontSize, md: fontSize },
         }}
       >
         {metadata.title?.toString()} (Beta)
@@ -66,17 +67,19 @@ export default function ResponsiveAppBar() {
       fontWeight: props.status == "active" ? "600" : "normal",
       margin: "4px",
       padding: "15px",
-      color: props.status == "active"
-        ? theme.palette.primary.main
-        : theme.palette.secondary.contrastText,
+      color:
+        props.status == "active"
+          ? theme.palette.primary.main
+          : theme.palette.secondary.contrastText,
       display: "block",
     })
   );
   const MobileAppBarLink = styled(Link)(
     (props: LinkProps & { status?: "active" | "inactive" }) => ({
-      color: props.status == "active"
-        ? theme.palette.primary.main
-        : theme.palette.secondary.contrastText,
+      color:
+        props.status == "active"
+          ? theme.palette.primary.main
+          : theme.palette.secondary.contrastText,
     })
   );
 
@@ -90,13 +93,22 @@ export default function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-
   return (
     <AppBar position="static" color={"secondary"}>
       <Container maxWidth="lg">
-        <Toolbar disableGutters>
+        <Toolbar
+          disableGutters
+          sx={{
+            flexDirection: { xs: "row", md: "column" },
+            alignItems: { xs: "center", md: "flex-start" },
+          }}
+        >
           <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+              padding: "10px",
+            }}
           >
             <AppIconTitle />
           </Box>
@@ -139,7 +151,11 @@ export default function ResponsiveAppBar() {
                         <MobileAppBarLink
                           href={mainMenuItem.url}
                           underline="none"
-                          status={pathname === mainMenuItem.url?"active":"inactive"}
+                          status={
+                            pathname === mainMenuItem.url
+                              ? "active"
+                              : "inactive"
+                          }
                         >
                           {mainMenuItem.title}
                         </MobileAppBarLink>
@@ -157,14 +173,14 @@ export default function ResponsiveAppBar() {
             <AppIconTitle fontSize="16px" iconSize={30} />
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, ml: 2 }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {mainMenu.map((mainMenuItem, index) => (
               <DesktopAppBarLink
                 key={index}
                 onClick={handleCloseNavMenu}
                 href={mainMenuItem.url}
                 underline="none"
-                status={pathname === mainMenuItem.url?"active":"inactive"}
+                status={pathname === mainMenuItem.url ? "active" : "inactive"}
               >
                 {mainMenuItem.title}
               </DesktopAppBarLink>

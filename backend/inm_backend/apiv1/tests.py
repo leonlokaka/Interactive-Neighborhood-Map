@@ -66,4 +66,10 @@ class ViewTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 400)
 
+    def test_parks_and_recreation_facilities(self):
+        url = reverse('parks_and_recreation_facilities')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
+
         

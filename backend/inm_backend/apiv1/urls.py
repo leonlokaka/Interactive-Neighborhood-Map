@@ -26,5 +26,6 @@ urlpatterns = format_suffix_patterns([
     path('neighbourhoods_geometry', views.neighbourhoods_geometry, name="neighbourhoods_geometry"),
     path('neighbourhood_crime_rates', views.neighbourhood_crime_rates, name="neighbourhood_crime_rates"),
     path('neighbourhoods_data', views.neighbourhoods_data, name="neighbourhoods_data"),
+    path('parks_and_recreation_facilities', views.parks_and_recreation_facilities, name="parks_and_recreation_facilities"),
 ]
 )

@@ -3,6 +3,7 @@ import json
 from mongoengine import *
 from inm_backend.models.neighbourhoods import Neighbourhoods
 from inm_backend.utils import get_mongodb_alias, point_in_geometry
+from rest_framework_mongoengine.serializers import DocumentSerializer
 
 class ParksAndRecreationFacilities(Document):
     meta = {
@@ -26,7 +27,7 @@ class ParksAndRecreationFacilities(Document):
     address = StringField()
     phone = StringField()
     url = StringField()
-    geometry = StringField()
+    geometry = DictField()
     updatedAt = DateTimeField(default=datetime.datetime.now)
 
 def json_to_ParksAndRecreationFacilities(json_str, save: bool = False):
@@ -64,7 +65,7 @@ def json_to_ParksAndRecreationFacilities(json_str, save: bool = False):
             address=str(properties.get('ADDRESS')).strip(),
             phone=str(properties.get('PHONE')).strip(),
             url=str(properties.get('URL')).strip(),
-            geometry=json.dumps(geometry),  # Convert geometry to JSON string
+            geometry=geometry,
         )
         documents.append(doc)
         obj_dict = {field: getattr(doc, field)
@@ -73,3 +74,8 @@ def json_to_ParksAndRecreationFacilities(json_str, save: bool = False):
             ParksAndRecreationFacilities.objects(locationid=doc.locationid).update(upsert=True, **obj_dict)
             
     return documents
+
+class ParksAndRecreationFacilitiesSerializer(DocumentSerializer):
+    class Meta:
+        model = ParksAndRecreationFacilities
+        fields = '__all__'

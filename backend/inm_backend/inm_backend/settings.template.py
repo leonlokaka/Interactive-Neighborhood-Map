@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_mongoengine',
     'rest_framework',
+    'rest_framework_mongoengine',
     'data_parser',
     'apiv1'
 ]
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = 'inm_backend.urls'
@@ -145,14 +148,5 @@ MONGODB_DATABASES = {
         "tz_aware": True,  # if you using timezones in django (USE_TZ = True)
     },
 }
-# "name": "data" if 'test' not in sys.argv else "data_test",
-REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 10
-    # 'DEFAULT_RENDERER_CLASSES': [
-    #     'rest_framework.renderers.JSONRenderer',
-    # ],
-    # 'DEFAULT_PARSER_CLASSES': [
-    #     'rest_framework.parsers.JSONParser',
-    # ]
-}
+
+CACHE_MIDDLEWARE_SECONDS = 2600000
