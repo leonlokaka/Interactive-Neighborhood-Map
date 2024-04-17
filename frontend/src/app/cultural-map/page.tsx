@@ -1,30 +1,12 @@
 "use client";
 import {
   Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
   Container,
   Grid,
-  Paper,
   Typography,
 } from "@mui/material";
-import { useRef, useState } from "react";
-import { useWindowSize } from "@uidotdev/usehooks";
-import HeapmapExplanation from "../common/HeapmapExplanation";
 
 export default function Page() {
-  //   const [arg, setArg] = useState<any>(true);
-  //   const updateFilter = () => {
-  //     setArg(!arg);
-  //     if (arg) iframeRef.current.src = dataUrl;
-  //     else iframeRef.current.src = "";
-  //   };
-  const iframeRef = useRef<any>(null);
-  const size = useWindowSize();
-
 
   return (
     <Container maxWidth="xl">

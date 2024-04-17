@@ -4,13 +4,15 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const metadata: Metadata = {
   title: "Toronto Neighborhood Map",
-  description: "An informative platform that provide Toronto neighborhood information in interactive map ",
+  description:
+    "An informative platform that provide Toronto neighborhood information in interactive map ",
   icons: "/logo.png",
 };
 
 const mainMenu = [
   { title: "Home", url: "/" },
   { title: "Crime Rates Map", url: "/crime-map" },
+  { title: "Crime Rates Statistic", url: "/area-crime-statistic" },
   { title: "Recreation Map", url: "/recreation-map" },
   { title: "Art Map", url: "/art-map" },
   { title: "Cultural Hotspot Map", url: "/cultural-map" },
@@ -25,4 +27,57 @@ const socialLinkages = [
   },
 ];
 
-export { metadata, mainMenu, socialLinkages };
+enum Panels {
+  "crime_map" = "crime_map",
+  "crime_heap_map" = "crime_heap_map",
+  "crime_comparison_area" = "crime_comparison_area",
+  "crime_ratio_compare" = "crime_ratio_compare",
+  "crime_guage" = "crime_guage",
+  "crime_growth_chart" = "crime_growth_chart",
+  "park" = "park",
+  "community_centre" = "community_centre",
+}
+
+const panelPaths = {
+  crime_map: process.env.GRAFANA_CRIME_MAP_PATH,
+  crime_heap_map: process.env.GRAFANA_CRIME_HEAP_MAP_PATH,
+  crime_comparison_area: process.env.GRAFANA_CRIME_COMPARISON_AREA_PATH,
+  crime_ratio_compare: process.env.GRAFANA_CRIME_RATIO_COMPARE_PATH,
+  crime_guage: process.env.GRAFANA_CRIME_GUAGE_PATH,
+  crime_growth_chart: process.env.GRAFANA_CRIME_GROWTH_CHART_PATH,
+  park: process.env.GRAFANA_PARK_CHART_PATH,
+  community_centre: process.env.GRAFANA_COMMUNITY_CENTRE_CHART_PATH,
+};
+
+const panelUrls: Map<string, URL | null> = new Map<string, URL | null>([
+  [Panels.crime_map, getPanelUrl(Panels.crime_map)],
+  [Panels.crime_heap_map, getPanelUrl(Panels.crime_heap_map)],
+  [Panels.crime_comparison_area, getPanelUrl(Panels.crime_comparison_area)],
+  [Panels.crime_ratio_compare, getPanelUrl(Panels.crime_ratio_compare)],
+  [Panels.crime_guage, getPanelUrl(Panels.crime_guage)],
+  [Panels.crime_growth_chart, getPanelUrl(Panels.crime_growth_chart)],
+  [Panels.park, getPanelUrl(Panels.park)],
+  [Panels.community_centre, getPanelUrl(Panels.community_centre)],
+]);
+
+function getPanelUrl(panel: Panels) {
+  if (panelPaths[panel] && process.env.GRAFANA_URL)
+    return new URL(panelPaths[panel] || "", process.env.GRAFANA_URL);
+  return null;
+}
+
+type OptionData = {
+  __text: string;
+  __value: string;
+};
+
+export type { OptionData };
+export {
+  metadata,
+  mainMenu,
+  socialLinkages,
+  panelPaths,
+  Panels,
+  getPanelUrl,
+  panelUrls,
+};

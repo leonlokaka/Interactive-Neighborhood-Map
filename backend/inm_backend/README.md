@@ -29,11 +29,27 @@ To run tests, run the following command
 ```bash
   python manage.py runserver
 ```
+or
+```bash
+  python manage.py runserver 0.0.0.0:8881
+```
+
+## Running Unit Test
+All
+```bash
+python manage.py test  data_parser.tests.test_models.TestNeighbourhoodCrimeRates
+```
+
+Run one of the test case
+```bash
+python manage.py test  data_parser.tests.test_models.TestNeighbourhoodCrimeRates
+```
+
 
 ## Running API Server in Production
 
-To run tests, run the following command
+To run production, run the following command
 
 ```bash
-  python manage.py runserver --settings=inm_backend.prod_settings
+  python manage.py runserver 0.0.0.0:8881 --settings=inm_backend.prod_settings
 ```

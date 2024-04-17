@@ -1,18 +1,10 @@
 "use client";
-import {
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { useWindowSize } from "@uidotdev/usehooks";
-import HeapmapExplanation from "../common/HeapmapExplanation";
 import SimpleCard from "../common/SimpleCard";
 import { Panels, panelUrls } from "../const";
-import {
-  ChartContainer,
-  chartAltMessage,
-} from "../common/Component";
+import { ChartContainer, chartAltMessage } from "../common/Component";
 import {
   NeighbourhoodFilterData,
   NeighbourhoodFilters,
@@ -25,8 +17,10 @@ export default function Page() {
     string,
     any
   >([
-    [Panels.crime_map, useRef<HTMLIFrameElement>(null)],
-    [Panels.crime_heap_map, useRef<HTMLIFrameElement>(null)],
+    [Panels.crime_comparison_area, useRef<HTMLIFrameElement>(null)],
+    [Panels.crime_ratio_compare, useRef<HTMLIFrameElement>(null)],
+    [Panels.crime_guage, useRef<HTMLIFrameElement>(null)],
+    [Panels.crime_growth_chart, useRef<HTMLIFrameElement>(null)],
   ]);
 
   const size = useWindowSize();
@@ -78,6 +72,7 @@ export default function Page() {
   return (
     <Container maxWidth="xl">
       <Grid container spacing={4} justifyContent={"center"}>
+        <Grid item xs={0} md={4}></Grid>
         <Grid item xs={12} md={4}>
           <SimpleCard title="Data Explanation">
             <>
@@ -85,55 +80,71 @@ export default function Page() {
                 Crime rate is calculated as the crime count per 100,000
                 population (resident population only) per year.
               </Typography>
-              {/* <Box sx={{ display: "flex", flexDirection: "row", mt: 2 }}>
-                <DateRangeIcon />
-                <Typography variant="body1" ml={2}>
-                  {" "}
-                  Date Range: 2020-2022
-                </Typography>
-              </Box> */}
             </>
           </SimpleCard>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <SimpleCard title="Heapmap Explanation" contentCenter>
-            <HeapmapExplanation
-              colorBarWidth={250}
-              pointerLabelWidth={100}
-              pointers={[
-                {
-                  text: "Lower Crime Rates",
-                  position: 0,
-                },
-                {
-                  text: "Higher Crime Rates",
-                  position: 100,
-                },
-              ]}
-            />
-          </SimpleCard>
-        </Grid>
+        <Grid item xs={0} md={4}></Grid>
         <Grid item xs={12} md={6}>
           <NeighbourhoodFilters
             onChange={(data) => {
               setNeighbourhoodFilterData(data);
             }}
-            show={[NeighbourhoodFilterTypes.year]}
+            show={[
+              NeighbourhoodFilterTypes.year,
+              NeighbourhoodFilterTypes.areaCode,
+            ]}
           ></NeighbourhoodFilters>
         </Grid>
         <Grid item xs={12}>
           <ChartContainer
             sx={{ display: "flex", justifyContent: "center", mb: 4 }}
           >
-            {(neighbourhoodFilterData.year && (
-              <iframe
-                ref={iframeRefs.get(Panels.crime_map)}
-                src={panelUrlsObj.get(Panels.crime_map)?.toString()}
-                width={size.width ? size.width * 0.9 : 800}
-                height={size.height ? size.height * 0.8 : 500}
-                frameBorder="0"
-              ></iframe>
-            )) ||
+            {(neighbourhoodFilterData.year &&
+              neighbourhoodFilterData.areaCode && (
+                <iframe
+                  ref={iframeRefs.get(Panels.crime_guage)}
+                  src={panelUrlsObj.get(Panels.crime_guage)?.toString()}
+                  width={size.width ? size.width * 0.9 : 800}
+                  height={size.height ? size.height * 0.8 : 500}
+                  frameBorder="0"
+                ></iframe>
+              )) ||
+              chartAltMessage}
+          </ChartContainer>
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <ChartContainer
+            sx={{ display: "flex", justifyContent: "center", mb: 4 }}
+          >
+            {(neighbourhoodFilterData.year &&
+              neighbourhoodFilterData.areaCode && (
+                <iframe
+                  ref={iframeRefs.get(Panels.crime_ratio_compare)}
+                  src={panelUrlsObj.get(Panels.crime_ratio_compare)?.toString()}
+                  width={size.width ? size.width * 0.9 : 800}
+                  height={size.height ? size.height * 0.8 : 500}
+                  frameBorder="0"
+                ></iframe>
+              )) ||
+              chartAltMessage}
+          </ChartContainer>
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <ChartContainer
+            sx={{ display: "flex", justifyContent: "center", mb: 4 }}
+          >
+            {(neighbourhoodFilterData.year &&
+              neighbourhoodFilterData.areaCode && (
+                <iframe
+                  ref={iframeRefs.get(Panels.crime_comparison_area)}
+                  src={panelUrlsObj
+                    .get(Panels.crime_comparison_area)
+                    ?.toString()}
+                  width={size.width ? size.width * 0.9 : 800}
+                  height={size.height ? size.height * 0.8 : 500}
+                  frameBorder="0"
+                ></iframe>
+              )) ||
               chartAltMessage}
           </ChartContainer>
         </Grid>
@@ -141,10 +152,10 @@ export default function Page() {
           <ChartContainer
             sx={{ display: "flex", justifyContent: "center", mb: 4 }}
           >
-            {(neighbourhoodFilterData.year && (
+            {(neighbourhoodFilterData.areaCode && (
               <iframe
-                ref={iframeRefs.get(Panels.crime_heap_map)}
-                src={panelUrlsObj.get(Panels.crime_heap_map)?.toString()}
+                ref={iframeRefs.get(Panels.crime_growth_chart)}
+                src={panelUrlsObj.get(Panels.crime_growth_chart)?.toString()}
                 width={size.width ? size.width * 0.9 : 800}
                 height={size.height ? size.height * 0.8 : 500}
                 frameBorder="0"

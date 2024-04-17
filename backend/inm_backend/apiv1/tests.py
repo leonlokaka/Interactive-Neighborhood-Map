@@ -33,6 +33,20 @@ class ViewTestCase(APITestCase):
         self.assertIsNotNone(response.data)
         self.assertEqual(response.data['min_year'], 2014)
         
+    def test_neighbourhood_crime_rates_year_options(self):
+        url = reverse('neighbourhood_crime_rates_year_options')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 10)
+        self.assertEqual(response.data[0]['__value'], 2023)
+        
+    def test_neighbourhood_area_options(self):
+        url = reverse('neighbourhood_area_options')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
+        self.assertEqual(response.data[0]['__text'], "Long Branch")
+
     def test_neighbourhood_crime_rates_yearly_stat(self):
         url = reverse('neighbourhood_crime_rates_yearly_stat')
         get_params = {'year': 2023}
@@ -41,7 +55,6 @@ class ViewTestCase(APITestCase):
         self.assertEqual(len(response.data[0]), 19)
         self.assertEqual(response.data[0]['max_assault_rate'], 827.5148926)
 
-        
     def test_neighbourhood_crime_rates_yearly_stat_wrong_param(self):
         url = reverse('neighbourhood_crime_rates_yearly_stat')
         get_params = {'year': 2000}
@@ -52,3 +65,11 @@ class ViewTestCase(APITestCase):
         url = reverse('neighbourhood_crime_rates_yearly_stat')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 400)
+
+    def test_parks_and_recreation_facilities(self):
+        url = reverse('parks_and_recreation_facilities')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
+
+        
