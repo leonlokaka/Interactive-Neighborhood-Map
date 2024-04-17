@@ -1,0 +1,30 @@
+version: '2'
+services:
+  frontend:
+    image: 'leonlo5302/inm-frontend:1.0.0'
+    container_name: inm-frontend
+    tty: true
+    ports:
+      - '8880:8880'
+  backend:
+    image: 'leonlo5302/inm-backend:1.0.1'
+    container_name: inm-backend
+    tty: true
+  db:
+    image: 'mongo:7'
+    container_name: inm-db
+    volumes:
+      - '/upload/volumes/data_db:/data/db'
+    env_file:
+      - db.env
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: inm-grafana
+    restart: unless-stopped
+    ports:
+      - '8883:3000'
+    volumes:
+      - '/upload/volumes/grafana:/var/lib/grafana'
+      - './grafana.ini:/etc/grafana/grafana.ini'
+    env_file:
+      - grafana.env

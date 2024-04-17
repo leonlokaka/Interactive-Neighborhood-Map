@@ -1,22 +1,15 @@
 "use client";
-import {
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { useWindowSize } from "@uidotdev/usehooks";
 import SimpleCard from "../common/SimpleCard";
 import { Panels, panelUrls } from "../const";
-import {
-  ChartContainer,
-  chartAltMessage,
-} from "../common/Component";
+import { ChartContainer, chartAltMessage } from "../common/Component";
 import {
   NeighbourhoodFilterData,
   NeighbourhoodFilters,
   NeighbourhoodFilterTypes,
-} from "../common/neighbourhoodFilters";
+} from "../common/NeighbourhoodFilters";
 
 export default function Page() {
   // eslint-disable-next-line react-hooks/exhaustive-deps

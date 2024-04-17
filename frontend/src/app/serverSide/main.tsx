@@ -21,7 +21,7 @@ async function getData() {
     data.yearOptions = await res.json();
   }
   res = await fetch(
-    getBackendApiUrl(process.env.BACKEND_AREA_CODE_OPTIONS)
+    getBackendApiUrl(process.env.BACKEND_AREA_CODE_OPTIONS_PATH)
   );
   if (res.ok) {
     data.areaCodeOptions = await res.json();

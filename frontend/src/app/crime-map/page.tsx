@@ -15,9 +15,9 @@ import {
 } from "../common/Component";
 import {
   NeighbourhoodFilterData,
-  NeighbourhoodFilterTypes,
   NeighbourhoodFilters,
-} from "../common/neighbourhoodFilters";
+  NeighbourhoodFilterTypes,
+} from "../common/NeighbourhoodFilters";
 
 export default function Page() {
   // eslint-disable-next-line react-hooks/exhaustive-deps

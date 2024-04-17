@@ -34,6 +34,17 @@ or
   python manage.py runserver 0.0.0.0:8881
 ```
 
+## Running Unit Test
+All
+```bash
+python manage.py test  data_parser.tests.test_models.TestNeighbourhoodCrimeRates
+```
+
+Run one of the test case
+```bash
+python manage.py test  data_parser.tests.test_models.TestNeighbourhoodCrimeRates
+```
+
 
 ## Running API Server in Production
 
